@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace GitHubUpdater.Providers;
+namespace GitHubAutoUpdater.Providers;
 
 public class GitHubReleaseProvider
 {
@@ -43,7 +43,7 @@ public class GitHubReleaseProvider
         var url = $"https://api.github.com/repos/{_repo}/releases/latest";
         var request = new HttpRequestMessage(HttpMethod.Get, url);
 
-        request.Headers.Add("User-Agent", "GitHubUpdater");
+        request.Headers.Add("User-Agent", "GitHubAutoUpdater");
         request.Headers.Add("Accept", "application/vnd.github+json");
         request.Headers.Add("X-GitHub-Api-Version", "2022-11-28");
         if (!string.IsNullOrEmpty(_token))

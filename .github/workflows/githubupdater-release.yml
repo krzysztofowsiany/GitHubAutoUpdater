@@ -28,7 +28,7 @@ jobs:
           echo "VERSION=$version" >> $env:GITHUB_OUTPUT
 
       - name: Pack NuGet
-        run: dotnet pack src/GitHubUpdater/GitHubUpdater.csproj -c Release -o ./nupkg -p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
+        run: dotnet pack src/GitHubAutoUpdater/GitHubAutoUpdater.csproj -c Release -o ./nupkg -p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
 
       - name: Push to NuGet
         run: |

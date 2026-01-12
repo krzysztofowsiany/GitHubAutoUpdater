@@ -1,4 +1,4 @@
-namespace GitHubUpdater;
+namespace GitHubAutoUpdater;
 
 public class UpdaterOptions
 {

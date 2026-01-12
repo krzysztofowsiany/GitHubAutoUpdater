@@ -1,7 +1,7 @@
-using GitHubUpdater.Providers;
+using GitHubAutoUpdater.Providers;
 using System.Diagnostics;
 
-namespace GitHubUpdater;
+namespace GitHubAutoUpdater;
 
 public class Updater
 {
@@ -60,7 +60,7 @@ public class Updater
     {
         var zipUrl = await GetNewVersionUrl(latest);
 
-        var updateDir = Path.Combine(Path.GetTempPath(), "GitHubUpdater");
+        var updateDir = Path.Combine(Path.GetTempPath(), "GitHubAutoUpdater");
         Directory.CreateDirectory(updateDir);
         var tempPath = Path.Combine(updateDir, $"update-{latest}.zip");
         Console.WriteLine($"Download path: {tempPath}");

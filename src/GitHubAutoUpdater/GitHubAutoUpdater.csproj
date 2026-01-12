@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 
     <!-- NuGet Package -->
-    <PackageId>GitHubUpdater</PackageId>
+    <PackageId>GitHubAutoUpdater</PackageId>
     <Authors>krzysztofowsiany</Authors>
     <Description>Auto-update library for Windows applications using GitHub Releases</Description>
     <PackageProjectUrl>https://github.com/krzysztofowsiany/GitHubUpdater</PackageProjectUrl>
