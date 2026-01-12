@@ -1,0 +1,44 @@
+name: GitHubUpdater Release
+
+on:
+  push:
+    tags:
+      - 'githubupdater-v*'
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/GitHubUpdater/GitHubUpdater.csproj
+
+      - name: Build
+        run: dotnet build src/GitHubUpdater/GitHubUpdater.csproj -c Release --no-restore
+
+      - name: Publish
+        run: dotnet publish src/GitHubUpdater/GitHubUpdater.csproj -c Release -o ./publish/GitHubUpdater --no-build
+
+      - name: Create ZIP
+        run: Compress-Archive -Path ./publish/GitHubUpdater/* -DestinationPath ./GitHubUpdater.zip
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/githubupdater-}" >> $env:GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: GitHubUpdater ${{ steps.get_version.outputs.VERSION }}
+          files: ./GitHubUpdater.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

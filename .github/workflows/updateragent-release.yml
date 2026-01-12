@@ -1,0 +1,44 @@
+name: UpdaterAgent Release
+
+on:
+  push:
+    tags:
+      - 'updateragent-v*'
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/UpdaterAgent/UpdaterAgent.csproj
+
+      - name: Build
+        run: dotnet build src/UpdaterAgent/UpdaterAgent.csproj -c Release --no-restore
+
+      - name: Publish
+        run: dotnet publish src/UpdaterAgent/UpdaterAgent.csproj -c Release -o ./publish/UpdaterAgent --no-build
+
+      - name: Create ZIP
+        run: Compress-Archive -Path ./publish/UpdaterAgent/* -DestinationPath ./UpdaterAgent.zip
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/updateragent-}" >> $env:GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: UpdaterAgent ${{ steps.get_version.outputs.VERSION }}
+          files: ./UpdaterAgent.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
