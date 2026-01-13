@@ -28,7 +28,7 @@ jobs:
         run: dotnet publish samples/SampleApp/SampleApp.csproj -c Release -r win-x64 --self-contained true
 
       - name: Initialize GitHubAutoUpdater
-        uses: your-org/GitHubAutoUpdater.Cli@v1
+        uses: krzysztofowsiany/GitHubAutoUpdater.Cli@v1
         with:
           args: init
         env:
@@ -37,14 +37,14 @@ jobs:
           UPDATER_VERSION: ${{ github.ref_name }}
 
       - name: Validate GitHubAutoUpdater setup
-        uses: your-org/GitHubAutoUpdater.Cli@v1
+        uses: krzysztofowsiany/GitHubAutoUpdater.Cli@v1
         with:
           args: doctor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish new version
-        uses: your-org/GitHubAutoUpdater.Cli@v1
+        uses: krzysztofowsiany/GitHubAutoUpdater.Cli@v1
         with:
           args: publish --version ${{ github.ref_name }} --app samples/SampleApp/bin/Release/net8.0/win-x64/SampleApp.exe
         env:
