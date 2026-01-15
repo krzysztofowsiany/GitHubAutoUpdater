@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GitHubAutoUpdater\GitHubAutoUpdater.csproj" />
+    <PackageReference Include="GitHubAutoUpdater" Version="0.0.2" />
   </ItemGroup>
 
 </Project>
