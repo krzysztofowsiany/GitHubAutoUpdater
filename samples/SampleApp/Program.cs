@@ -9,7 +9,7 @@ class Program
 
         await Updater.Configure(o =>
         {
-            o.Repository = "krzysztofowsiany/GitHubUpdater";
+            o.Repository = "krzysztofowsiany/GitHubAutoUpdater";
             o.CurrentVersion = "0.0.1";
             o.GitHubToken = config.GitHubToken;
             o.AssetName = "SampleApp.zip";
