@@ -1,9 +1,9 @@
-name: GitHubUpdater Release
+name: GitHubAutoUpdater Release
 
 on:
   push:
     tags:
-      - 'githubupdater-v*'
+      - 'githubautoupdater-v*'
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ jobs:
       - name: Get version from tag
         id: get_version
         run: |
-          $version = "${{ github.ref_name }}" -replace '^githubupdater-v', ''
+          $version = "${{ github.ref_name }}" -replace '^githubautoupdater-v', ''
           echo "VERSION=$version" >> $env:GITHUB_OUTPUT
 
       - name: Pack NuGet
@@ -40,7 +40,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: GitHubUpdater ${{ steps.get_version.outputs.VERSION }}
+          name: GitHubAutoUpdater ${{ steps.get_version.outputs.VERSION }}
           files: ./nupkg/*.nupkg
           generate_release_notes: true
         env:

@@ -1,9 +1,9 @@
-﻿name: SampleApp Release
+name: SampleApp Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'sampleapp-v*'
 
 permissions:
   contents: write
@@ -21,31 +21,29 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Get version from tag
+        id: get_version
+        run: |
+          $version = "${{ github.ref_name }}" -replace '^sampleapp-v', ''
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+
       - name: Restore dependencies
         run: dotnet restore samples/SampleApp/SampleApp.csproj
 
       - name: Build
-        run: dotnet publish samples/SampleApp/SampleApp.csproj -c Release -r win-x64 --self-contained true
+        run: dotnet build samples/SampleApp/SampleApp.csproj -c Release --no-restore
 
-      - name: Initialize GitHubAutoUpdater
-        uses: krzysztofowsiany/GitHubAutoUpdater.Cli@v1
-        with:
-          args: init
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          UPDATER_REPOSITORY: kowsiany/SampleApp
-          UPDATER_VERSION: ${{ github.ref_name }}
+      - name: Publish
+        run: dotnet publish samples/SampleApp/SampleApp.csproj -c Release -o ./publish/SampleApp --no-build
 
-      - name: Validate GitHubAutoUpdater setup
-        uses: krzysztofowsiany/GitHubAutoUpdater.Cli@v1
-        with:
-          args: doctor
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create ZIP
+        run: Compress-Archive -Path ./publish/SampleApp/* -DestinationPath ./SampleApp.zip
 
-      - name: Publish new version
-        uses: krzysztofowsiany/GitHubAutoUpdater.Cli@v1
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          args: publish --version ${{ github.ref_name }} --app samples/SampleApp/bin/Release/net8.0/win-x64/SampleApp.exe
+          name: SampleApp ${{ steps.get_version.outputs.VERSION }}
+          files: ./SampleApp.zip
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
